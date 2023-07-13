@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+import(dplyr)
+import(tidyverse)
+import(xlsx)
+importFrom(berryFunctions, insertRows)
+importFrom(magrittr,  "%>%")
+importFrom(heatmaply, heatmaply)
+importFrom(tm, removeNumbers)
