@@ -17,6 +17,6 @@ License: jepm
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 2.10), dplyr, tidyverse, xlsx, berryFunctions, magrittr, usethis, heatmaply, tm
+    R (>= 2.10)
 Imports: dplyr, tidyverse, xlsx, berryFunctions, magrittr, usethis, heatmaply, tm
 RoxygenNote: 7.2.3
