@@ -64,14 +64,28 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       ## GUARDAMOS NUESTRA TABLA EN LA CARPETA
 
       Final=as.data.frame(Final)
-
-      if (rm.duplicados==TRUE){
-        Final=Final[!duplicated(Final$`Gene ID (v4.0.a1)`),]
-      }
-
+      Final=Final[!duplicated(Final$`Gene ID (v4.0.a1)`),]
       Final=as.matrix(Final)
 
       xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados/Candidates_",distance_SNPs,"kb_",nombre,".xlsx"))
+
+      ##SI QUEREMOS LOS DUPLICADOS, CREAMOS OTRA CARPETA DIFERENTE
+
+      if (rm.duplicados==FALSE){
+        if (any(dir(path)=="Resultados_dup")){
+      } else {
+        dir.create(paste0(path,"/Resultados_dup"))
+      }
+
+      nombre=gsub(".*_Results_dup","",gsub(".csv","",documentos[a]))
+
+      ## GUARDAMOS NUESTRA TABLA EN LA CARPETA
+
+      Final=as.data.frame(Final)
+      Final=as.matrix(Final)
+
+      xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados_dup/Candidates_dup",distance_SNPs,"kb_",nombre,".xlsx"))
+        }
 
 
       ##POR EL CONTRARIO, SI NO HAY NINGUN CANDIDATO
