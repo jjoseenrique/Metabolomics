@@ -87,7 +87,7 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       Final=as.data.frame(Final)
       Final=as.matrix(Final)
 
-      xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados_duplicados_/Candidates_dup",distance_SNPs,"kb_",nombre,".xlsx"))
+      xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados_dup/Candidates_duplicados_",distance_SNPs,"kb_",nombre,".xlsx"))
         }
 
 
