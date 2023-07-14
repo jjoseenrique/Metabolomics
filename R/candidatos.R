@@ -7,7 +7,7 @@
 #' @return Tras correr este codigo se genera un .xlsx en la carpeta Resultados, en el que se muestran los genes candidatos con los criterios seleccionados
 #'
 
-candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados=TRUE){
+candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados="both"){
 
   #MIRAMOS QUE DOCUMENTOS HAY EN EL PATH
 
@@ -87,6 +87,29 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       Final=as.data.frame(Final)
       Final=as.matrix(Final)
 
+      xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados_dup/Candidates_duplicados_",distance_SNPs,"kb_",nombre,".xlsx"))
+        
+        } else if (rm.duplicados=="both"){
+
+          if (any(dir(path)=="Resultados_dup")){
+            } else {
+          dir.create(paste0(path,"/Resultados_dup"))
+        }
+        
+          if (any(dir(path)=="Resultados")){
+            } else {
+          dir.create(paste0(path,"/Resultados"))
+      }
+
+      nombre=gsub(".*_Results","",gsub(".csv","",documentos[a]))
+
+      ## GUARDAMOS NUESTRA TABLA EN LA CARPETA
+
+      Final=as.data.frame(Final)
+      Final_sin=Final[!duplicated(Final$`Gene ID (v4.0.a1)`),]
+      Final=as.matrix(Final)
+
+      xlsx::write.xlsx(x=Final_sin,file=paste0(path,"/Resultados/Candidates_",distance_SNPs,"kb_",nombre,".xlsx"))
       xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados_dup/Candidates_duplicados_",distance_SNPs,"kb_",nombre,".xlsx"))
         }
 
