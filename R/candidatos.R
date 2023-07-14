@@ -51,6 +51,8 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
     ##EN EL CASO DE QUE HAYA ALGUNA COINCIDENCIA
 
     if (!is.null(Final)){
+      
+      if (rm.duplicados==TRUE){
 
       ##CREAMOS LA CARPETA RESULTADOS SI NO ESTÁ CREADA
 
@@ -68,14 +70,15 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       Final=as.matrix(Final)
 
       xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados/Candidates_",distance_SNPs,"kb_",nombre,".xlsx"))
-
+      
       ##SI QUEREMOS LOS DUPLICADOS, CREAMOS OTRA CARPETA DIFERENTE
+        
+        } else if (rm.duplicados==FALSE){
 
-      if (rm.duplicados==FALSE){
-        if (any(dir(path)=="Resultados_dup")){
-      } else {
-        dir.create(paste0(path,"/Resultados_dup"))
-      }
+          if (any(dir(path)=="Resultados_dup")){
+            } else {
+          dir.create(paste0(path,"/Resultados_dup"))
+        }
 
       nombre=gsub(".*_Results_dup","",gsub(".csv","",documentos[a]))
 
