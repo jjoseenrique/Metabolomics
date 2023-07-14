@@ -80,7 +80,7 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
           dir.create(paste0(path,"/Resultados_dup"))
         }
 
-      nombre=gsub(".*_Results_dup","",gsub(".csv","",documentos[a]))
+      nombre=gsub(".*_Results","",gsub(".csv","",documentos[a]))
 
       ## GUARDAMOS NUESTRA TABLA EN LA CARPETA
 
