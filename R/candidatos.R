@@ -7,7 +7,7 @@
 #' @return Tras correr este codigo se genera un .xlsx en la carpeta Resultados, en el que se muestran los genes candidatos con los criterios seleccionados
 #'
 
-candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados="both"){
+candidatos_test=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados="both"){
 
   #MIRAMOS QUE DOCUMENTOS HAY EN EL PATH
 
@@ -33,6 +33,8 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       for (n in 1:length(interesting)){
 
         myChr = Annotation %>% dplyr::filter(Annotation[,2]==GWAS$Chr[n])
+        newColumn = data.frame (position = rep (NA, nrow(myChr)), location = rep (NA, nrow(myChr)), distance = rep (NA, nrow(myChr)))
+        myChr = cbind (newColumn,myChr)
 
         #SEGUNDA PARTE DEL BUCLE
 
@@ -41,7 +43,18 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
           if ((GWAS$Pos[n] >= myChr$Start[i] & GWAS$Pos[n] <= myChr$Stop[i]) | (GWAS$Pos[n]-myChr$Stop[i]<=distance_SNPs*1000 & GWAS$Pos[n]-myChr$Stop[i]>= 0) | (myChr$Start[i]-GWAS$Pos[n]<=distance_SNPs*1000 & myChr$Start[i]-GWAS$Pos[n]>= 0)) {
 
             Final=rbind(Final,myChr[i,])
-            rownames(Final)[nrow(Final)]=paste(nrow(Final),"_",GWAS$Chr[n],GWAS$Pos[n])
+            rownames(Final)[nrow(Final)]=paste(nrow(Final),"_",GWAS$SNP[n])
+            Final[nrow(Final),1]=GWAS$Pos[n]
+            if (GWAS$Pos[n] < myChr$Start[i]){
+              Final[nrow(Final),2]=c("Pre")
+              Final[nrow(Final),3]=myChr$Start[i]-GWAS$Pos[n]
+            } else if (GWAS$Pos[n] >= myChr$Start[i] & GWAS$Pos[n] <= myChr$Stop[i]){
+              Final[nrow(Final),2]="In"
+              Final[nrow(Final),3]=0
+            } else if (GWAS$Pos[n] >= myChr$Stop[i]){
+              Final[nrow(Final),2]="Post" 
+              Final[nrow(Final),3]=GWAS$Pos[n]-myChr$Start[i]
+            }
           }
         }
 
@@ -66,7 +79,8 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
       ## GUARDAMOS NUESTRA TABLA EN LA CARPETA
 
       Final=as.data.frame(Final)
-      Final=Final[!duplicated(Final$`Gene ID (v4.0.a1)`),]
+      Final = Final[order(Final[,3]),]
+      Final <- Final[!duplicated(Final$`Gene ID (v4.0.a1)`), ]
       Final=as.matrix(Final)
 
       xlsx::write.xlsx(x=Final,file=paste0(path,"/Resultados/Candidates_",distance_SNPs,"kb_",nombre,".xlsx"))
