@@ -7,7 +7,7 @@
 #' @return Tras correr este codigo se genera un .xlsx en la carpeta Resultados, en el que se muestran los genes candidatos con los criterios seleccionados
 #'
 
-candidatos_test=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados="both"){
+candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.duplicados="both"){
 
   #MIRAMOS QUE DOCUMENTOS HAY EN EL PATH
 
