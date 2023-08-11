@@ -6,7 +6,7 @@
 #' @return Tras correr este código se presentan los metabolitos que faltan por encontrar.
 #'
 
-primarios_faltan_p <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto) {
+primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto) {
   
   if (!(set2 %in% ls())) {
     set2 <- read.delim(set2, header = FALSE)
