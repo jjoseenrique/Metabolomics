@@ -5,7 +5,7 @@
 #' @return Tras correr este código se presentan los metabolitos que faltan por encontrar. Incluir los tiempos especificos en TagFinder para un segundo filtro
 #'
 
-primarios_p <- function(set, tiempos = Tiempos_Especificos_Fruto) {
+primarios <- function(set, tiempos = Tiempos_Especificos_Fruto) {
   if (!(set %in% ls())) {
     set <- read.delim(set, header = FALSE)
   }
