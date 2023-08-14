@@ -6,7 +6,7 @@
 #'
 
 primarios <- function(set, tiempos = Tiempos_Especificos_Fruto) {
-  if (!(set %in% ls())) {
+  if (typeof(set)=="character") {
     set <- read.delim(set, header = FALSE)
   }
   
@@ -58,7 +58,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto) {
     
     assign("resultados", resultados, envir = .GlobalEnv)
     
-    return(resultados)
+    #return(resultados)
     
   } else {
     if (any(dir("../") == "Resultados")) {
@@ -71,7 +71,8 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto) {
     }
     
     assign("resultados", MatrizFinal, envir = .GlobalEnv)
-    
-    return(MatrizFinal)
+    print("Set completo, no falta ninguno")
+
+    #return(MatrizFinal)
   }
 }
