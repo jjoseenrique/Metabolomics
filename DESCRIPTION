@@ -1,7 +1,7 @@
 Package: Metabolomics
 Type: Package
 Title: Makes it easy to obtain final results from primary metabolites analysis (TagFinder sets)
-Version: 5.0.0
+Version: 5.2.0
 Author: Jjoseenrique
 Maintainer: <jepm@uma.es>
 Description: This package has diferente functions:
@@ -12,11 +12,12 @@ Description: This package has diferente functions:
     5. heatmaps: Create a heatmap representation of your data (specific format is required)
     6. candidatos: Generate a file with the candidates genes for each trait. Specify the path and it will do everything for you
     7. candidatos_old_version: Generate a file with the candidate genes for a trait according to selected SNPs
+    8. primer: Compare primer to the F. vesca genome, to identify SNPs
     Use four spaces when indenting paragraphs within the Description.
 License: jepm
 Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 2.10)
-Imports: dplyr, tidyverse, xlsx, berryFunctions, magrittr, usethis, heatmaply, tm
+Imports: dplyr, tidyverse, xlsx, berryFunctions, magrittr, usethis, heatmaply, tm, Biostrings
 RoxygenNote: 7.2.3

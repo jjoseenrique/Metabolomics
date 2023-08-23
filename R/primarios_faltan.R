@@ -8,8 +8,8 @@
 
 primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto) {
   
-  if (!(set2 %in% ls())) {
-    set2 <- read.delim(set2, header = FALSE)
+  if (typeof(set2)=="character") {
+    set2 <- read.delim(set, header = FALSE)
   }
   
   MatrizFinal <- set_primarios[[1]]
