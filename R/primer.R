@@ -17,7 +17,7 @@ RevComp=function(seq){
 ## Ahora ya procedemos con nuestra funcion:
 
 primer=function(seq_primer,chromosome){
-  results<-vmatchPattern(seq_primer,Fvesca_genome[[chromosome]])
+  results<-Biostrings::vmatchPattern(seq_primer,Fvesca_genome[[chromosome]])
   if (!is.null(results@ends[[1]])){
     if (length(results@ends[[1]])>1){
       stop("\n\033[1mPrimer no válido: Hay varias coincidencias\033[0m\n")
@@ -26,7 +26,7 @@ primer=function(seq_primer,chromosome){
     results[[1]]
   } else {
     seq_primer<-RevComp(seq_primer)
-    results<-vmatchPattern(seq_primer,Fvesca_genome[[chromosome]])
+    results<-Biostrings::vmatchPattern(seq_primer,Fvesca_genome[[chromosome]])
     if (is.null(results@ends[[1]])){
       stop("Primer no valido: No se une a la secuencia")
     }
