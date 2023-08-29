@@ -10,6 +10,7 @@ originalName=deparse(substitute(samplelist))
 assign(originalName,samplelist)
 
 samplelist$SAMPTEXT=gsub(".*_","",samplelist$Sample)
+samplelist$RAWNAME=gsub("t_","t__",samplelist$RAWNAME)
 
 
 for (i in 1:nrow(samplelist)){
