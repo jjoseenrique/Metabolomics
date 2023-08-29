@@ -13,6 +13,8 @@ samplelist$SAMPNUMB=gsub(".*_","",
                           gsub("-.*","",samplelist$SAMPNUMB)
 )
 
+samplelist$RAWNAME=gsub("t_","t__",samplelist$RAWNAME)
+  
 for (i in 1:nrow(samplelist)){
     for (n in 1:nrow(Patron_genotipos)){
       if (samplelist[i,4]==Patron_genotipos[n,1]){
