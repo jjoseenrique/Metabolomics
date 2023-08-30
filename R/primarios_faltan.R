@@ -95,9 +95,53 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   
   MatrizFinal_faltan <- rbind(nombres, MatrizFinal_faltan)
   
+  ############ AÑADIMOS LO SIGUIENTE PARA LAS NORMALIZACIONES ############
+  
+  if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
+    
+    # Separar los nombres de las muestras y los datos numéricos
+    nombres_muestras <- MatrizFinal_faltan[1:6,]
+    datos_numericos <- as.data.frame(MatrizFinal_faltan[-(1:6),])
+    
+
+    datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],numerico)))
+    
+    normalizado_ribitol <- datos_numericos
+    
+    rib <- which(normalizado_ribitol[,3]=="T_9067")
+    
+    for (j in 44:ncol(normalizado_ribitol)){
+      for (k in 1:(nrow(normalizado_ribitol))){
+        if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
+          normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
+        } else {
+          normalizado_ribitol[k,j]=NA
+        }
+      }
+    }
+    
+    normalizado_control=normalizado_ribitol
+    
+    medias=which(nombres_muestras[2,]==3)
+    
+    for (l in 44:ncol(normalizado_control)) {
+      for (m in 1:nrow(normalizado_control)) {
+          normalizado_control[m,l] <- suppressWarnings(as.numeric(normalizado_ribitol[m,l])/mean(as.numeric(normalizado_ribitol[m,medias]),na.rm=TRUE))
+      }
+    }
+    
+  }
+  
+  ###################################################################
+  
+  normalizado_ribitol=rbind(nombres,normalizado_ribitol)
+  normalizado_control=rbind(nombres,normalizado_control)
+  
   output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
   
-  xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE)
+  xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
+  xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)
+  xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
   
   if (!is.null(Faltan)) {
     Faltan <- Faltan[order(Faltan$Tag_Mass), ]
