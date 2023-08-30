@@ -110,6 +110,8 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     
     rib <- which(normalizado_ribitol[,3]=="T_9067")
     
+    if (length(rib == 0)){
+    
     for (j in 44:ncol(normalizado_ribitol)){
       for (k in 1:(nrow(normalizado_ribitol))){
         if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
@@ -130,6 +132,17 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
       }
     }
     
+    } else {
+      normalizado_control <- datos_numericos
+      
+      medias=which(nombres_muestras[2,]==3)
+      
+      for (l in 44:ncol(normalizado_control)) {
+        for (m in 1:nrow(normalizado_control)) {
+          normalizado_control[m,l] <- suppressWarnings(as.numeric(normalizado_ribitol[m,l])/mean(as.numeric(normalizado_ribitol[m,medias]),na.rm=TRUE))
+        }
+      }
+    }
   }
   
   ###################################################################
