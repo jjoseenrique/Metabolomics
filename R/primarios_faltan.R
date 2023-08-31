@@ -85,7 +85,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   }
   
   if (!is.null(Faltan)) {
-    Faltan_relleno <- matrix(NA, nrow(Faltan), ncol(MatrizFinal_faltan) - 14)
+    Faltan_relleno <- matrix(NA, nrow(Faltan), ncol(MatrizFinal_faltan) - 6)
     Faltan_relleno <- cbind(Faltan, Faltan_relleno)
     Faltan_relleno <- cbind(matrix(data = NA, nrow(Faltan_relleno), 3), Faltan_relleno)
     
