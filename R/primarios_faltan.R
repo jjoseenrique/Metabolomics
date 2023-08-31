@@ -3,10 +3,11 @@
 #' @param set2 .txt generado por tag finder aplicando los filtros especificos de la funcion "primarios
 #' @param set_primarios lista generada por la funcion "primarios". Se usa como input en esta funcion
 #' @param tiempos Plantilla de Tiempos Especificos. Por defecto hay 3 (Hoja, Fruto y Split)(Todo de fresa)
+#' @param normalizar Decidir si se desean normalizar los datos. Se sirve del nombre de "tiempos" para decidir si usar el ribitol (splitless) o no (split)
 #' @return Tras correr este código se presentan los metabolitos que faltan por encontrar.
 #'
 
-primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto) {
+primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE) {
   
   if (typeof(set2)=="character") {
     set2 <- read.delim(set, header = FALSE)
@@ -95,7 +96,14 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   
   MatrizFinal_faltan <- rbind(nombres, MatrizFinal_faltan)
   
+  orden = as.numeric(MatrizFinal_faltan[2, 44:ncol(MatrizFinal_faltan)])
+  idx = order(orden)
+  MatrizFinal_faltan[, 44:ncol(MatrizFinal_faltan)] = MatrizFinal_faltan[, idx + 43]
+  
+  
   ############ AÑADIMOS LO SIGUIENTE PARA LAS NORMALIZACIONES ############
+  
+  if (normalizar==TRUE){
   
   if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
     
@@ -144,23 +152,36 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
       }
     }
   }
-  
-  ###################################################################
-  
-  normalizado_ribitol=rbind(nombres,normalizado_ribitol)
-  normalizado_control=rbind(nombres,normalizado_control)
+    
+    normalizado_ribitol=rbind(nombres_muestras,normalizado_ribitol)
+    normalizado_control=rbind(nombres_muestras,normalizado_control)
+    
+    output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
+    
+    xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
+    xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)
+    xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
+    
+    if (!is.null(Faltan)) {
+      Faltan <- Faltan[order(Faltan$Tag_Mass), ]
+      xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
+      return(Faltan)
+    } else {
+      cat("\n", sample(frases, 1), "\n", homer)
+    }
+    
+  } else {
   
   output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
   
   xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
-  xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)
-  xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
-  
+
   if (!is.null(Faltan)) {
     Faltan <- Faltan[order(Faltan$Tag_Mass), ]
     xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
     return(Faltan)
   } else {
     cat("\n", sample(frases, 1), "\n", homer)
+  }
   }
 }
