@@ -112,7 +112,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     datos_numericos <- as.data.frame(MatrizFinal_faltan[-(1:6),])
     
 
-    datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],numerico)))
+    datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],as.numeric)))
     
     normalizado_ribitol <- datos_numericos
     
