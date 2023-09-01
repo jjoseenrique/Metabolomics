@@ -39,9 +39,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
   
   MatrizFinal <- rbind(data[1:6, ], MatrizFinal)
   
-  orden = as.numeric(MatrizFinal[2, 44:ncol(MatrizFinal)])
-  idx = order(orden)
-  MatrizFinal[, 44:ncol(MatrizFinal)] = MatrizFinal[, idx + 43]
+
   
   # Seleccionamos aquellos que faltan comparándolo con la matriz tiempos aportada
   Faltan_Tiempos <- setdiff(tiempos[, 2], MatrizFinal[, 8])
@@ -57,7 +55,12 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
       cat("\n", "FALTAN LOS SIGUIENTES", "\n")
       print(x[[2]])
       invisible(x)
+    } else {   
+      orden = as.numeric(MatrizFinal[2, 44:ncol(MatrizFinal)])
+      idx = order(orden)
+      MatrizFinal[, 44:ncol(MatrizFinal)] = MatrizFinal[, idx + 43]
     }
+      
     
     mostrar(resultados)
     
