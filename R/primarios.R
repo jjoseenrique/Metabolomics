@@ -55,13 +55,8 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
       cat("\n", "FALTAN LOS SIGUIENTES", "\n")
       print(x[[2]])
       invisible(x)
-    } else {   
-      orden = as.numeric(MatrizFinal[2, 44:ncol(MatrizFinal)])
-      idx = order(orden)
-      MatrizFinal[, 44:ncol(MatrizFinal)] = MatrizFinal[, idx + 43]
-    }
-      
-    
+    }   
+
     mostrar(resultados)
     
     assign("resultados", resultados, envir = .GlobalEnv)
@@ -69,6 +64,12 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
     #return(resultados)
     
   } else {
+
+    ############ ORDENAMOS NUESTRAS MUESTRAS ############
+    
+    orden = as.numeric(MatrizFinal[2, 44:ncol(MatrizFinal)])
+    idx = order(orden)
+    MatrizFinal[, 44:ncol(MatrizFinal)] = MatrizFinal[, idx + 43]
     
     ############ AÑADIMOS LO SIGUIENTE PARA LAS NORMALIZACIONES ############
     
