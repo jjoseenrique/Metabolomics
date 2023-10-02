@@ -64,9 +64,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   }
   
   MatrizFinal <- as.data.frame(MatrizFinal)
-  
-  frases <- c("DE PUTA MADRE", "ESTAN TODOS BRO", "INCREIBLE, PEDAZO DE SET", "TREMENDA MARAVILLA", "DE LOCOS HERMANO")
-  
+   
   Faltan_Tiempos <- setdiff(tiempos[, 2], MatrizFinal_faltan[, 8])
   Faltan <- NULL
   
@@ -167,7 +165,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
       xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
       return(Faltan)
     } else {
-      cat("\n", sample(frases, 1), "\n", homer)
+      cat("\n", "Set completo, no falta ninguno")
     }
     
   } else {
@@ -181,7 +179,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
     return(Faltan)
   } else {
-    cat("\n", sample(frases, 1), "\n", homer)
+    cat("\n", "Set completo, no falta ninguno")
   }
   }
 }
