@@ -4,12 +4,12 @@
 #' @param barra_secundaria Permite activar o desactivar la barra secundaria a mostrar en el heatmap
 #' @param barra_secundaria_nombre Lo que significa esta barra secundaria (Genotipo, localizacion...)
 #' @param reorganizar_col Permita activar o desactivar el clustering de columnas
-#' @param reorganizar_row Permita activar o desactivar el clustering de columnas
+#' @param reorganizar_row Permita activar o desactivar el clustering de filas
 #' @param modelo_orden Función a usar para clusterizar. Por defecto es "dist", pero se puede seleccionar entre "pearson", "spearman" y "kendall"
 #' @return Tras correr este código se muestra el Heatmap en la ventana "Viewer".
 #'
 
-heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Location", reorganizar_col=TRUE, reorganizar_cow=TRUE, modelo_orden="dist"){
+heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Location", reorganizar_col=TRUE, reorganizar_row=TRUE, modelo_orden="dist"){
 
   if (any(dir()=="Resultados")==TRUE) {
     setwd("Resultados")
