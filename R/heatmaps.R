@@ -107,6 +107,7 @@ heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Locatio
     subplot_widths_values = c(0.85, 0.14)
     } else {
     subplot_widths_values= 1
+  }
   
   heatmaply::heatmaply(data_log, colors = colores, Colv = reorganizar_Col,
                        distfun = modelo_orden,
@@ -114,7 +115,7 @@ heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Locatio
                        column_text_angle = 90,
                        col_side_colors = col_side_colors_values,
                        subplot_heights = subplot_heights_values,
-                       subplot_widths = c(0.85, 0.14),
+                       subplot_widths = subplot_widths_values,
                        limits = c(-rango, rango),
                        file = NULL)
 
