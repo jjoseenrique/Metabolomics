@@ -4,11 +4,12 @@
 #' @param barra_secundaria Permite activar o desactivar la barra secundaria a mostrar en el heatmap
 #' @param barra_secundaria_nombre Lo que significa esta barra secundaria (Genotipo, localizacion...)
 #' @param reorganizar_col Permita activar o desactivar el clustering de columnas
+#' @param reorganizar_row Permita activar o desactivar el clustering de columnas
 #' @param modelo_orden Función a usar para clusterizar. Por defecto es "dist", pero se puede seleccionar entre "pearson", "spearman" y "kendall"
 #' @return Tras correr este código se muestra el Heatmap en la ventana "Viewer".
 #'
 
-heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Location", reorganizar_Col=TRUE, modelo_orden="dist"){
+heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Location", reorganizar_col=TRUE, reorganizar_cow=TRUE, modelo_orden="dist"){
 
   if (any(dir()=="Resultados")==TRUE) {
     setwd("Resultados")
@@ -92,15 +93,20 @@ heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Locatio
     col_side_colors_values = NULL
   }
   
-  if (reorganizar_Col && barra_secundaria){
+  if (reorganizar_col && barra_secundaria){
     subplot_heights_values=c(0.15,0.04,0.8)
-  } else if (reorganizar_Col && !barra_secundaria){
+  } else if (reorganizar_col && !barra_secundaria){
     subplot_heights_values = c(0.15,0.84)
-  } else if (!reorganizar_Col && barra_secundaria){
+  } else if (!reorganizar_col && barra_secundaria){
     subplot_heights_values = c(0.04,0.95)
   } else {
     subplot_heights_values= 1
-  }
+  } 
+
+  if (reorganizar_row){
+    subplot_widths_values = c(0.85, 0.14)
+    } else {
+    subplot_widths_values= 1
   
   heatmaply::heatmaply(data_log, colors = colores, Colv = reorganizar_Col,
                        distfun = modelo_orden,
