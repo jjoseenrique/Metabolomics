@@ -109,7 +109,7 @@ heatmaps=function(datos, barra_secundaria=TRUE, barra_secundaria_nombre="Locatio
     subplot_widths_values= 1
   }
   
-  heatmaply::heatmaply(data_log, colors = colores, Colv = reorganizar_Col,
+  heatmaply::heatmaply(data_log, colors = colores, Colv = reorganizar_col,
                        distfun = modelo_orden,
                        showticklabels = c(T, T),
                        column_text_angle = 90,
