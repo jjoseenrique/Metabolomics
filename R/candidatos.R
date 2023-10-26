@@ -46,13 +46,13 @@ candidatos=function(path=getwd(), distance_SNPs=350, min.P.value=1e-07, rm.dupli
             rownames(Final)[nrow(Final)]=paste(nrow(Final),"_",GWAS$SNP[n])
             Final[nrow(Final),1]=GWAS$Pos[n]
             if (GWAS$Pos[n] < myChr$Start[i]){
-              Final[nrow(Final),2]=c("Pre")
+              Final[nrow(Final),2]="Post"
               Final[nrow(Final),3]=myChr$Start[i]-GWAS$Pos[n]
             } else if (GWAS$Pos[n] >= myChr$Start[i] & GWAS$Pos[n] <= myChr$Stop[i]){
               Final[nrow(Final),2]="In"
               Final[nrow(Final),3]=0
             } else if (GWAS$Pos[n] >= myChr$Stop[i]){
-              Final[nrow(Final),2]="Post" 
+              Final[nrow(Final),2]="Pre" 
               Final[nrow(Final),3]=GWAS$Pos[n]-myChr$Start[i]
             }
           }
