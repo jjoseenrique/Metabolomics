@@ -13,6 +13,7 @@ Description: This package has diferente functions:
     6. candidatos: Generate a file with the candidates genes for each trait. Specify the path and it will do everything for you
     7. candidatos_old_version: Generate a file with the candidate genes for a trait according to selected SNPs
     8. primer: Compare primer to the F. vesca genome, to identify SNPs
+    9. SNP: Find the relevant SNPs among huge GWAS files
     Use four spaces when indenting paragraphs within the Description.
 License: jepm
 Encoding: UTF-8
