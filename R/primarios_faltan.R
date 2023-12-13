@@ -7,7 +7,7 @@
 #' @return Tras correr este código se presentan los metabolitos que faltan por encontrar.
 #'
 
-primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE) {
+primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE, normalizar_rib=TRUE) {
   
   if (typeof(set2)=="character") {
     set2 <- read.delim(set, header = FALSE)
@@ -103,7 +103,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   
   if (normalizar==TRUE){
   
-  if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
+  ###if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
     
     # Separar los nombres de las muestras y los datos numéricos
     nombres_muestras <- MatrizFinal_faltan[1:6,]
@@ -113,21 +113,22 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],as.numeric)))
     
     normalizado_ribitol <- datos_numericos
+
+    if (normalizar_rib==TRUE){
+      rib <- which(normalizado_ribitol[,3]=="T_9067")
     
-    rib <- which(normalizado_ribitol[,3]=="T_9067")
+      if (length(rib == 0)){
     
-    if (length(rib == 0)){
-    
-    for (j in 44:ncol(normalizado_ribitol)){
-      for (k in 1:(nrow(normalizado_ribitol))){
-        if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
-          normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
-        } else {
-          normalizado_ribitol[k,j]=NA
+      for (j in 44:ncol(normalizado_ribitol)){
+        for (k in 1:(nrow(normalizado_ribitol))){
+          if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
+            normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
+          } else {
+            normalizado_ribitol[k,j]=NA
+          }
         }
       }
     }
-    
     normalizado_control=normalizado_ribitol
     
     medias=which(nombres_muestras[2,]==3)
@@ -149,7 +150,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
         }
       }
     }
-  }
+  ###}
     
     normalizado_ribitol=rbind(nombres_muestras,normalizado_ribitol)
     normalizado_control=rbind(nombres_muestras,normalizado_control)
@@ -157,7 +158,8 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
     
     xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
-    xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)
+    if(normalizar_rib==TRUE){
+      xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)}
     xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
     
     if (!is.null(Faltan)) {
@@ -182,4 +184,8 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     cat("\n", "Set completo, no falta ninguno")
   }
   }
+}
+
+primarios_faltan_split <- function(set2) {
+  primarios(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Split, normalizar=TRUE, normalizar_rib=FALSE)
 }
