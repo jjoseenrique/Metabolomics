@@ -6,7 +6,7 @@
 #' @return Tras correr este código se presentan los metabolitos que faltan por encontrar. Incluir los tiempos especificos en TagFinder para un segundo filtro
 #'
 
-primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE) {
+primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE, normalizar_rib=TRUE) {
   if (typeof(set)=="character") {
     set <- read.delim(set, header = FALSE)
   }
@@ -86,16 +86,18 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
       
       normalizado_ribitol <- datos_numericos
       
-      rib <- which(normalizado_ribitol[,3]=="T_9067")
+      if (normalizar_rib==TRUE){
+          rib <- which(normalizado_ribitol[,3]=="T_9067")
       
       if (length(rib == 0)){
         
-        for (j in 44:ncol(normalizado_ribitol)){
-          for (k in 1:(nrow(normalizado_ribitol))){
-            if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
-              normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
-            } else {
-              normalizado_ribitol[k,j]=NA
+          for (j in 44:ncol(normalizado_ribitol)){
+            for (k in 1:(nrow(normalizado_ribitol))){
+              if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
+                normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
+              } else {
+                normalizado_ribitol[k,j]=NA
+              }
             }
           }
         }
@@ -146,4 +148,8 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE)
 
     }
   }
+}
+
+primarios_split <- function(set) {
+  primarios(set, tiempos = Tiempos_Especificos_Split, normalizar = TRUE, normalizar_rib=FALSE)
 }
