@@ -187,5 +187,5 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
 }
 
 primarios_faltan_split <- function(set2) {
-  primarios(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Split, normalizar=TRUE, normalizar_rib=FALSE)
+  primarios_faltan(set2, set_primarios=resultados, tiempos = Tiempos_Especificos_Split, normalizar=TRUE, normalizar_rib=FALSE)
 }
