@@ -75,7 +75,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
     
     if (normalizar==TRUE){
     
-    #if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
+    ###if (deparse(substitute(tiempos))=="Tiempos_Especificos_Fruto" | deparse(substitute(tiempos))=="Tiempos_Especificos_Hojas"){
       
       # Separar los nombres de las muestras y los datos numéricos
       nombres_muestras <- MatrizFinal[1:6,]
@@ -123,7 +123,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
           }
         }
       }
-    }
+    ###}
 
       normalizado_ribitol=rbind(nombres_muestras,normalizado_ribitol)
       normalizado_control=rbind(nombres_muestras,normalizado_control) 
