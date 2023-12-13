@@ -131,7 +131,8 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
       output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
       
       xlsx::write.xlsx(MatrizFinal, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
-      xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)
+      if (normalizar_rib==TRUE){
+          xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)}
       xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
       
       assign("resultados", MatrizFinal, envir = .GlobalEnv)
