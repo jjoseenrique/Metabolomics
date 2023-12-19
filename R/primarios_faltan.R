@@ -19,7 +19,10 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   trues2 <- set2 %>%
     dplyr::filter(V1 == "true" & V2 == "true")
   
-  faltan <- rbind(set2[1:6, ], trues2)
+  limit=which(MatrizFinal$V4=="Name Analyte")
+  limit2=which(set2$V4=="Name Analyte")
+  
+  faltan <- rbind(set2[1:limit2, ], trues2)
   
   Matriz_faltan <- NULL
   
@@ -37,8 +40,8 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     Matriz_faltan[, 15] <- as.numeric(Matriz_faltan[, 15])
   }
   
-  nombres <- MatrizFinal[1:6, ]
-  Matriz_faltan <- rbind(MatrizFinal[-(1:6), ], Matriz_faltan)
+  nombres <- MatrizFinal[1:limit, ]
+  Matriz_faltan <- rbind(MatrizFinal[-(1:limit), ], Matriz_faltan)
   Matriz_faltan[, 8] <- as.numeric(Matriz_faltan[, 8])
   Matriz_faltan[, 15] <- as.numeric(Matriz_faltan[, 15])
   
@@ -64,7 +67,7 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   }
   
   MatrizFinal <- as.data.frame(MatrizFinal)
-   
+  
   Faltan_Tiempos <- setdiff(tiempos[, 2], MatrizFinal_faltan[, 8])
   Faltan <- NULL
   
@@ -104,39 +107,39 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
   if (normalizar==TRUE){
     
     # Separar los nombres de las muestras y los datos numéricos
-    nombres_muestras <- MatrizFinal_faltan[1:6,]
-    datos_numericos <- as.data.frame(MatrizFinal_faltan[-(1:6),])
+    nombres_muestras <- MatrizFinal_faltan[1:limit,]
+    datos_numericos <- as.data.frame(MatrizFinal_faltan[-(1:limit),])
     
-
+    
     datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],as.numeric)))
     
     normalizado_ribitol <- datos_numericos
-
+    
     if (normalizar_rib==TRUE){
       rib <- which(normalizado_ribitol[,3]=="T_9067")
-    
+      
       if (length(rib == 0)){
-    
-      for (j in 44:ncol(normalizado_ribitol)){
-        for (k in 1:(nrow(normalizado_ribitol))){
-          if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
-            normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
-          } else {
-            normalizado_ribitol[k,j]=NA
+        
+        for (j in 44:ncol(normalizado_ribitol)){
+          for (k in 1:(nrow(normalizado_ribitol))){
+            if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
+              normalizado_ribitol[k,j] <- datos_numericos[k,j]/datos_numericos[rib,j]
+            } else {
+              normalizado_ribitol[k,j]=NA
+            }
           }
         }
       }
-    }
-    normalizado_control=normalizado_ribitol
-    
-    medias=which(nombres_muestras[2,]==3)
-    
-    for (l in 44:ncol(normalizado_control)) {
-      for (m in 1:nrow(normalizado_control)) {
+      normalizado_control=normalizado_ribitol
+      
+      medias=which(nombres_muestras[2,]==3)
+      
+      for (l in 44:ncol(normalizado_control)) {
+        for (m in 1:nrow(normalizado_control)) {
           normalizado_control[m,l] <- suppressWarnings(as.numeric(normalizado_ribitol[m,l])/mean(as.numeric(normalizado_ribitol[m,medias]),na.rm=TRUE))
+        }
       }
-    }
-    
+      
     } else {
       normalizado_control <- datos_numericos
       
@@ -168,18 +171,18 @@ primarios_faltan <- function(set2, set_primarios=resultados, tiempos = Tiempos_E
     }
     
   } else {
-  
-  output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
-  
-  xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
-
-  if (!is.null(Faltan)) {
-    Faltan <- Faltan[order(Faltan$Tag_Mass), ]
-    xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
-    return(Faltan)
-  } else {
-    cat("\n", "Set completo, no falta ninguno")
-  }
+    
+    output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
+    
+    xlsx::write.xlsx(MatrizFinal_faltan, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
+    
+    if (!is.null(Faltan)) {
+      Faltan <- Faltan[order(Faltan$Tag_Mass), ]
+      xlsx::write.xlsx(Faltan, file.path(output_path, "Faltan.xlsx"), col.names = FALSE, row.names = FALSE, showNA = FALSE)
+      return(Faltan)
+    } else {
+      cat("\n", "Set completo, no falta ninguno")
+    }
   }
 }
 
