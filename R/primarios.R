@@ -15,7 +15,9 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
   trues <- set %>%
     dplyr::filter(V1 == "true" & V2 == "true")
   
-  data <- rbind(set[1:6, ], trues)
+  limit=which(set$V4=="Name Analyte")
+  
+  data <- rbind(set[1:limit, ], trues)
   
   # Seleccionamos aquellos que coinciden con la tabla de tiempos aportada
   Matriz <- data %>%
@@ -37,9 +39,9 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
     }
   }
   
-  MatrizFinal <- rbind(data[1:6, ], MatrizFinal)
+  MatrizFinal <- rbind(data[1:limit, ], MatrizFinal)
   
-
+  
   
   # Seleccionamos aquellos que faltan comparándolo con la matriz tiempos aportada
   Faltan_Tiempos <- setdiff(tiempos[, 2], MatrizFinal[, 8])
@@ -56,7 +58,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
       print(x[[2]])
       invisible(x)
     }   
-
+    
     mostrar(resultados)
     
     assign("resultados", resultados, envir = .GlobalEnv)
@@ -64,7 +66,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
     #return(resultados)
     
   } else {
-
+    
     ############ ORDENAMOS NUESTRAS MUESTRAS ############
     
     orden = as.numeric(MatrizFinal[2, 44:ncol(MatrizFinal)])
@@ -74,10 +76,10 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
     ############ AÑADIMOS LO SIGUIENTE PARA LAS NORMALIZACIONES ############
     
     if (normalizar==TRUE){
-  
+      
       # Separar los nombres de las muestras y los datos numéricos
-      nombres_muestras <- MatrizFinal[1:6,]
-      datos_numericos <- as.data.frame(MatrizFinal[-(1:6),])
+      nombres_muestras <- MatrizFinal[1:limit,]
+      datos_numericos <- as.data.frame(MatrizFinal[-(1:limit),])
       
       
       datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],as.numeric)))
@@ -85,10 +87,10 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
       normalizado_ribitol <- datos_numericos
       
       if (normalizar_rib==TRUE){
-          rib <- which(normalizado_ribitol[,3]=="T_9067")
-      
-      if (length(rib == 0)){
+        rib <- which(normalizado_ribitol[,3]=="T_9067")
         
+        if (length(rib == 0)){
+          
           for (j in 44:ncol(normalizado_ribitol)){
             for (k in 1:(nrow(normalizado_ribitol))){
               if (!is.na(datos_numericos[k,j]) & !is.na(datos_numericos[rib,j])) {
@@ -121,7 +123,7 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
           }
         }
       }
-
+      
       normalizado_ribitol=rbind(nombres_muestras,normalizado_ribitol)
       normalizado_control=rbind(nombres_muestras,normalizado_control) 
       
@@ -129,21 +131,21 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
       
       xlsx::write.xlsx(MatrizFinal, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
       if (normalizar_rib==TRUE){
-          xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)}
+        xlsx::write.xlsx(normalizado_ribitol, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Ribitol", append = T)}
       xlsx::write.xlsx(normalizado_control, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Controles", append = T)
       
       assign("resultados", MatrizFinal, envir = .GlobalEnv)
       print("Set completo, no falta ninguno")
       
     } else {
-    
-    output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
-    
-    xlsx::write.xlsx(MatrizFinal, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
-    
-    assign("resultados", MatrizFinal, envir = .GlobalEnv)
-    print("Set completo, no falta ninguno")
-
+      
+      output_path <- ifelse(any(dir("../") == "Resultados"), "../Resultados", "Resultados")
+      
+      xlsx::write.xlsx(MatrizFinal, file.path(output_path, "Results_Final.xlsx"), col.names = FALSE, row.names = FALSE, showNA = TRUE, sheetName = "Resultados")
+      
+      assign("resultados", MatrizFinal, envir = .GlobalEnv)
+      print("Set completo, no falta ninguno")
+      
     }
   }
 }
