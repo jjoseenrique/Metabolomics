@@ -81,7 +81,6 @@ primarios <- function(set, tiempos = Tiempos_Especificos_Fruto, normalizar=TRUE,
       nombres_muestras <- MatrizFinal[1:limit,]
       datos_numericos <- as.data.frame(MatrizFinal[-(1:limit),])
       
-      
       datos_numericos[,44:ncol(datos_numericos)]=suppressWarnings(as.data.frame(lapply(datos_numericos[,44:ncol(datos_numericos)],as.numeric)))
       
       normalizado_ribitol <- datos_numericos
